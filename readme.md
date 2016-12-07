@@ -92,6 +92,10 @@ The following options are available for configuration.
     - In "multiple" mode, strings may contain multiple dates separated by commas. *ex: 2/3/2012, 3/15/2012, 4/2/2012*
     - In "range" mode, strings may contain two dates separated by a hyphen. *ex: 2/3/2012 - 3/15/2012*
 
+- `closeOnSelection`: Close the calendar popup when a date is selected.
+    - Only works in `Kalendae.Input` and in `single` mode.
+    - Default is `false`.
+
 - `months`:	The total number of months to display side by side on the calendar.
     - Default is `1`.
 
@@ -116,6 +120,10 @@ The following options are available for configuration.
     - Uses the `format` definition.
     - Default is `null` (this month or month of first selected day).
 
+- `endDate`: Date defining the last day and month which will be selectable.
+    - Uses the `format` definition.
+    - Default is `null` (this month or month of first selected day).
+
 - `dateClassMap`: A key/value collection of css classes organized by date.  String date keys found in this collection will have their value attached to the SPAN tag for the date.  This allows for custom coloring for specific days.  See the first example in index.html for usage.
     - Note that this property uses the `dayAttributeFormat` option, NOT the format option, for date strings.
     - Default is `null`.
@@ -136,8 +144,11 @@ The following settings alter the internal behavior of Kalendae and should only b
 
 - `columnHeaderFormat`:	The format of moment data of the week day name to display in column headers.
     - Default is `dd`
-- `titleFormat`: Format string used in the calendar title.
-    - Default is `"MMMM, YYYY"`
+
+- `titleMonthFormat`: Format string used for the month in the calendar title.
+    - Default is `"MMMM,"`
+- `titleYearFormat`: Format string used for the year in the calendar title.
+    - Default is `"YYYY"`
 
 - `dayNumberFormat`: Format string for individual day numbers.
 	- Default is `"D"`
@@ -178,7 +189,9 @@ The following functions are available on the instantiated `Kalendae` and `Kalend
 
 - `addSelected(string|Date|moment)`: Adds the passed value to the selection. Behavior varies according to the `mode` option, but matches behavior of clicking on a day in the calendar.
 
-- `removeSelected(string|Date|moment)`: removes the passed value from the selection.
+- `removeSelected(string|Date|moment)`: Removes the passed value from the selection.
+
+- `removeAllSelected()`: Clears all selected values.
 
 - `draw()`: Forces a redraw of the calendar contents.
 
@@ -218,6 +231,8 @@ Kalendae offers the following events:
 - `date-clicked` - Fires when a date has been clicked, but before the selection is changed.  Receives the date clicked as a moment object in the first parameter.  Returning false will prevent selection change.
 
 - `view-changed` - Fires when the user has clicked the next or previous month button, but before the calendar is redrawn.  Returning false will prevent the change.
+
+- `draw-end` - Fires when the draw function has finished.
 
 Additionally, Kalendae.Input provides the following events:
 
