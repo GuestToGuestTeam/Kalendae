@@ -628,7 +628,6 @@ Kalendae.prototype = {
 				if (opts.dateClassMap[dateString]) klass.push(opts.dateClassMap[dateString]);
 
 				if (redrawDays) {
-					console.log('ttt');
 					$span.innerHTML = day.format(opts.dayNumberFormat);
 				}
 				$span.className = klass.join(' ');
