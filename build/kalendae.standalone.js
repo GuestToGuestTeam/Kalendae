@@ -199,7 +199,7 @@ var Kalendae = function (targetElement, options) {
 		if (j) util.make('div', {'class':classes.monthSeparator}, $container);
 	}
 
-	self.draw();
+	self.draw(true);
 
 	util.addEvent($container, 'mousedown', function (event, target) {
 		var clickedDate;
@@ -207,7 +207,7 @@ var Kalendae = function (targetElement, options) {
 		//NEXT MONTH BUTTON
 			if (!self.disableNext && self.publish('view-changed', self, ['next-month']) !== false) {
 				self.viewStartDate.add(1, 'months');
-				self.draw();
+				self.draw(true);
 			}
 			return false;
 
@@ -215,7 +215,7 @@ var Kalendae = function (targetElement, options) {
 		//PREVIOUS MONTH BUTTON
 			if (!self.disablePreviousMonth && self.publish('view-changed', self, ['previous-month']) !== false) {
 				self.viewStartDate.subtract(1,'months');
-				self.draw();
+				self.draw(true);
 			}
 			return false;
 
@@ -223,7 +223,7 @@ var Kalendae = function (targetElement, options) {
 		//NEXT MONTH BUTTON
 			if (!self.disableNext && self.publish('view-changed', self, ['next-year']) !== false) {
 				self.viewStartDate.add(1, 'years');
-				self.draw();
+				self.draw(true);
 			}
 			return false;
 
@@ -231,7 +231,7 @@ var Kalendae = function (targetElement, options) {
 		//PREVIOUS MONTH BUTTON
 			if (!self.disablePreviousMonth && self.publish('view-changed', self, ['previous-year']) !== false) {
 				self.viewStartDate.subtract(1,'years');
-				self.draw();
+				self.draw(true);
 			}
 			return false;
 
@@ -464,7 +464,7 @@ Kalendae.prototype = {
 			if (new_dates[0]) {
 				this.viewStartDate = moment(new_dates[0], this.settings.format);
 			}
-			this.draw();
+			this.draw(false);
 		}
 	},
 
@@ -494,7 +494,7 @@ Kalendae.prototype = {
 		}
 		this._sel.sort(function (a,b) {return a.startOf('day').yearDay() - b.startOf('day').yearDay();});
 		this.publish('change', this, [date]);
-		if (draw !== false) this.draw();
+		if (draw !== false) this.draw(false);
 		return true;
 	},
 
@@ -504,7 +504,7 @@ Kalendae.prototype = {
 		var end = moment(x).endOf('week').subtract(1,'day');
 		this._sel = [start, end];
 		this.publish('change', this, [mom.day()]);
-		this.draw();
+		this.draw(false);
 	},
 
 	monthDaySelected: function(month, daynumber, unselected) {
@@ -542,14 +542,14 @@ Kalendae.prototype = {
 			if (this._sel[i].startOf('day').yearDay() === date.startOf('day').yearDay()) {
 				this._sel.splice(i,1);
 				this.publish('change', this, [date]);
-				if (draw !== false) this.draw();
+				if (draw !== false) this.draw(false);
 				return true;
 			}
 		}
 		return false;
 	},
 
-	draw : function draw() {
+	draw : function draw(redrawDays) {
 		// return;
 		var month = moment(this.viewStartDate).startOf('month').add(12, 'hours'), //force middle of the day to avoid any weird date shifts
 			day,
@@ -630,7 +630,10 @@ Kalendae.prototype = {
 				dateString = day.format(this.settings.dayAttributeFormat);
 				if (opts.dateClassMap[dateString]) klass.push(opts.dateClassMap[dateString]);
 
-				$span.innerHTML = day.format(opts.dayNumberFormat);
+				if (redrawDays) {
+					console.log('ttt');
+					$span.innerHTML = day.format(opts.dayNumberFormat);
+				}
 				$span.className = klass.join(' ');
 				$span.setAttribute('data-date', dateString);
 
