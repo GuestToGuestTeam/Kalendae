@@ -457,7 +457,7 @@ Kalendae.prototype = {
 		i = new_dates.length;
 		while(i--) { this.addSelected(new_dates[i], false); }
 
-		if (draw !== false) {
+		if (draw !== false && this.settings.popupMode) {
 			if (new_dates[0]) {
 				this.viewStartDate = moment(new_dates[0], this.settings.format);
 			}
