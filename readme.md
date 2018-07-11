@@ -1,4 +1,4 @@
-#Kalendae - A framework agnostic javascript date picker
+# Kalendae - A framework agnostic javascript date picker
 
 Kalendae is an attempt to do something that nobody has yet been able to do: make a date picker that doesn't suck.  Kalendae provides the following features:
 
@@ -13,7 +13,7 @@ Kalendae is an attempt to do something that nobody has yet been able to do: make
 9. Output selected dates in a variety of formats
 10. Leverages [moment.js](http://www.momentjs.com) for smart and easy date parsing.
 
-##Screenshots
+## Screenshots
 
 Default calendar, no options defined.  
 ![screenshot](http://i.imgur.com/Ig52z.png)
@@ -24,10 +24,10 @@ Two month calendar attached to an input element.
 Two month, range selection, future dates only, with weekends blacked out:  
 ![screenshot](http://i.imgur.com/JzBc7.png)
 
-###[View The Demo Page](http://chipersoft.github.com/Kalendae/)
+### [View The Demo Page](http://twipped.github.com/Kalendae/)
 
 
-##Usage
+## Usage
 
 Copy the contents of the `build/` folder into wherever your website scripts are kept.  Include the JS and CSS files in the head of your document like so:
 ```html
@@ -56,11 +56,11 @@ You can also setup Kalendae manually via JavaScript code. This should be done ei
 
 See the included index.html file for usage examples.
 
-###jQuery
+### jQuery
 
 Kalendae does not require jQuery, but does provide a jQuery plugin when jQuery is available.  jQuery users may create a Kalendae widget or popup by calling `$(selector).kalendae(options)`.  If `selector` is an HTML input element, an instance of Kalendae.Input is created, otherwise the instance will be Kalendae.  This instance is stored via jQuery's data method and can be accessed via `$(selector).data('kalendae')`.
 
-##moment.js
+## moment.js
 
 To ease date handling processes, Kalendae bundles the [moment.js](http://www.momentjs.com) date handling library.  This bundled library has been altered to prevent it from being added to the global context, but is still available if you wish to use it in your own code.  Add the following directly after the `<script>` tag to make moment available for your application.
 ```html
@@ -68,7 +68,7 @@ To ease date handling processes, Kalendae bundles the [moment.js](http://www.mom
     window.moment = Kalendae.moment;
 </script>
 ```
-##Options
+## Options
 
 The following options are available for configuration.
 
@@ -88,9 +88,13 @@ The following options are available for configuration.
     - `"range"`: Selects multiple days in sequence. First click defines start of the range, second defines the end of the range.
 
 - `selected`: The date selected when the calendar is created.
-    - Values my be a string, JavaScript Date object, Moment object, or an array containing any of the three.
+    - Values may be a string, JavaScript Date object, Moment object, or an array containing any of the three.
     - In "multiple" mode, strings may contain multiple dates separated by commas. *ex: 2/3/2012, 3/15/2012, 4/2/2012*
     - In "range" mode, strings may contain two dates separated by a hyphen. *ex: 2/3/2012 - 3/15/2012*
+
+- `closeOnSelection`: Close the calendar popup when a date is selected.
+    - Only works in `Kalendae.Input` and in `single` mode.
+    - Default is `false`.
 
 - `months`:	The total number of months to display side by side on the calendar.
     - Default is `1`.
@@ -116,6 +120,10 @@ The following options are available for configuration.
     - Uses the `format` definition.
     - Default is `null` (this month or month of first selected day).
 
+- `endDate`: Date defining the last day and month which will be selectable.
+    - Uses the `format` definition.
+    - Default is `null` (this month or month of first selected day).
+
 - `dateClassMap`: A key/value collection of css classes organized by date.  String date keys found in this collection will have their value attached to the SPAN tag for the date.  This allows for custom coloring for specific days.  See the first example in index.html for usage.
     - Note that this property uses the `dayAttributeFormat` option, NOT the format option, for date strings.
     - Default is `null`.
@@ -129,15 +137,18 @@ The following options are available for configuration.
 - `side`: Chooses the side on which to display the picker. Default is `bottom`.
 
 
-###Advanced Behavior Options
+### Advanced Behavior Options
 
 The following settings alter the internal behavior of Kalendae and should only be changed by advanced users.
 
 
 - `columnHeaderFormat`:	The format of moment data of the week day name to display in column headers.
     - Default is `dd`
-- `titleFormat`: Format string used in the calendar title.
-    - Default is `"MMMM, YYYY"`
+
+- `titleMonthFormat`: Format string used for the month in the calendar title.
+    - Default is `"MMMM,"`
+- `titleYearFormat`: Format string used for the year in the calendar title.
+    - Default is `"YYYY"`
 
 - `dayNumberFormat`: Format string for individual day numbers.
 	- Default is `"D"`
@@ -154,13 +165,13 @@ The following settings alter the internal behavior of Kalendae and should only b
 - `multipleDelimiter`: String used to delimit dates when outputting in multiple mode
     - Default is `', '`
 
-###Example Blackout Functions
+### Example Blackout Functions
 
 - Blackout weekends: `function (date) {return [1,0,0,0,0,0,1][Kalendae.moment(date).day()];}`
 - Blackout every other day: `function (date) {return Kalendae.moment(date).date() % 2;}`
 - Blackout every other week `function (date) {return Kalendae.moment(date).format('w') % 2;}`
 
-##Member Functions
+## Member Functions
 
 The following functions are available on the instantiated `Kalendae` and `Kalendae.Input` objects.
 
@@ -178,11 +189,13 @@ The following functions are available on the instantiated `Kalendae` and `Kalend
 
 - `addSelected(string|Date|moment)`: Adds the passed value to the selection. Behavior varies according to the `mode` option, but matches behavior of clicking on a day in the calendar.
 
-- `removeSelected(string|Date|moment)`: removes the passed value from the selection.
+- `removeSelected(string|Date|moment)`: Removes the passed value from the selection.
+
+- `removeAllSelected()`: Clears all selected values.
 
 - `draw()`: Forces a redraw of the calendar contents.
 
-##Member Properties
+## Member Properties
 
 The following properties are exposed on the instantiated `Kalendae` and `Kalendae.Input` objects.
 
@@ -192,7 +205,7 @@ The following properties are exposed on the instantiated `Kalendae` and `Kalenda
 
 - `calendars`: The individual month divs (see the `months` option).
 
-##Kalendae Events
+## Kalendae Events
 
 Kalendae uses a publish/subscribe event system.  To receive events from a Kalendae instance you can call the `subscribe()` function on the Kalendae instance, passing the event name and a callback function.  Example:
 ```js
@@ -219,6 +232,8 @@ Kalendae offers the following events:
 
 - `view-changed` - Fires when the user has clicked the next or previous month button, but before the calendar is redrawn.  Returning false will prevent the change.
 
+- `draw-end` - Fires when the draw function has finished.
+
 Additionally, Kalendae.Input provides the following events:
 
 - `show` - Fires when the calendar appears due to the input gaining focus
@@ -226,12 +241,12 @@ Additionally, Kalendae.Input provides the following events:
 - `hide` - Fires when the calendar hides due to the input blurring
 
 
-##Skinning Kalendae
+## Skinning Kalendae
 
 Coming Soon.
 
 
-##Building Kalendae
+## Building Kalendae
 
 The Kalendae source code is assembled from multiple individual files.  A standard GNU makefile is included to compile the files together into the finished product.
 
@@ -240,13 +255,13 @@ To build Kalendae, navigate to the directory containing this readme file in the 
 To create a minified version, run `make minified`.  If the minified file is blank, run `make minified-test` to see what errors Google Closure Compiler is throwing.
 
 
-##Contributing to Kalendae
+## Contributing to Kalendae
 
 1. Please submit all pull requests to the `dev` branch from your own named branch.
 2. Please only include the changes within the `src/` directory, do not include new builds.
 3. New code should match the existing code style, with hard tabs for indentation, spaces for alignment, and [BSD/KNF style bracketing](http://en.wikipedia.org/wiki/Indent_style#BSD_KNF_style).
 4. Please be aware that I have family and work obligations and may take some time to respond to your Pull Request.
 
-##License
+## License
 
 Kalendae is released under an MIT license and is freely distributable.
